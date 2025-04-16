@@ -1,30 +1,28 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("com.google.gms.google-services")
-    kotlin("kapt")
-}
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.google.gms.google.services)
 
+    id("com.google.gms.google-services") version "4.4.2" apply false
+    id("com.google.gms.google-services")
+}
 android {
-    namespace = "com.tuusuario.bookfinder"
-    compileSdk = 34
+    namespace = "com.ucb.ucbtest"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tuusuario.bookfinder"
+        applicationId = "com.ucb.ucbtest"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-    }
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -35,96 +33,58 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
-
 dependencies {
-    // Android Core
-    implementation(libs.androidx.core.ktx.v1120)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v262)
-
-    // Compose
-    implementation(libs.androidx.compose.bom.v20231001)
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    implementation(libs.androidx.activity.compose.v180)
-    implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.runtime.livedata)
-
-    // Navigation
-    implementation(libs.androidx.navigation.compose.v274)
-
-    // Hilt
-    implementation(libs.hilt.android.v248)
-    implementation(libs.androidx.hilt.navigation.compose.v100)
-    implementation(libs.androidx.material3.android)
-    kapt(libs.hilt.compiler.v248)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.core.v173)
-    implementation(libs.kotlinx.coroutines.android)
-
-    // Coil
-    implementation(libs.coil.compose.v240)
-
-    // Firebase
-    implementation(libs.firebase.messaging.ktx)
-
-    // Serialization
-    implementation(libs.kotlinx.serialization.json.v160)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-// Converter (si usas kotlinx.serialization o Moshi puedes cambiar este)
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // Moshi
-    implementation(libs.moshi.v1150)
-    implementation(libs.moshi.kotlin.v1150)
-    ksp(libs.moshi.kotlin.codegen.v1150)
-
-    // Room
-    implementation(libs.androidx.room.runtime.v260)
-    implementation(libs.androidx.room.ktx.v260)
-    ksp(libs.androidx.room.compiler.v260)
-
-    // Testing
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit.v115)
-    androidTestImplementation(libs.androidx.espresso.core.v351)
-    androidTestImplementation(libs.androidx.compose.bom)
-    androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Debug
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.runtime.livedata)
+    debugImplementation(libs.leakcanary.android)
+    implementation(libs.navigation)
+    implementation(libs.hilt.navigation)
+    implementation(libs.kotlinx.coroutines.core) // Para Flow
+    implementation(libs.coil)
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.test)
+    kaptAndroidTest(libs.hilt.compiler)
 
-    // Módulos
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.firebase.messaging)
+
+//    implementation(project(":usecases"))
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":framework"))
+
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
 }
 
 kapt {
